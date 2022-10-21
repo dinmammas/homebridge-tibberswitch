@@ -1,6 +1,6 @@
 # Homebridge-Tibberswitch
 
-WIP
+WIP - not sure if it works at all yet :D 
 
 **This plugin will:**
 * Fetch current energy price from the tibber api.

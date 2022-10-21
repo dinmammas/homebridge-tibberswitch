@@ -1,8 +1,8 @@
 {
   "name": "homebridge-tibberswitch",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "author": "David Karlsson",
-  "description": "Gets information from a Robonect card installed in various robotic lawn mowers.",
+  "description": "Fetches hourly electrical prices from Tibber and if the current price is lower than todays average, a motion is triggered.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

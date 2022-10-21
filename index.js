@@ -71,20 +71,23 @@ myTS.prototype = {
 
       let minPrice = 100000
       let maxPrice = 0
-      let avgPrice = 0
-      for (var i = 0; i < allPrices.length; i++) {
-        if (allPrices[i].total * 100 < minPrice)
+      let averagePrice = 0
+      for (var i = 0; i < allPrices.length; i++){
+        if (allPrices[i].total * 100 < minPrice){
           minPrice = Math.round(allPrices[i].total * 100)
-        if (allPrices[i].total * 100 > maxPrice)
+        }
+        if (allPrices[i].total * 100 > maxPrice){
           maxPrice = Math.round(allPrices[i].total * 100)
-        avgPrice += allPrices[i].total
+        }
+        averagePrice += allPrices[i].total
       }
-      avgPrice = avgPrice / allPrices.length * 100
+      averagePrice = averagePrice / allPrices.length * 100
       
-      let lowprice = false;
-      let priceOre = Math.round(price * 100);
-      if (priceOre < avgPrice)
-        lowprice = true;
+      let lowprice = false
+      let priceOre = Math.round(price * 100)
+      
+      if (priceOre < averagePrice)
+        lowprice = true
       
       me.motionService.getCharacteristic(Characteristic.MotionDetected).updateValue(lowprice);
       
@@ -102,7 +105,7 @@ myTS.prototype = {
     informationService
       .setCharacteristic(Characteristic.Manufacturer, "Tibber")
       .setCharacteristic(Characteristic.Model, "Beta")
-      .setCharacteristic(Characteristic.SerialNumber, "0.1.0");
+      .setCharacteristic(Characteristic.SerialNumber, "0.1.2");
     this.services.push(informationService);
 
     
