@@ -70,26 +70,27 @@ myTS.prototype = {
       let allPrices = priceJson['data']['viewer']['homes'][0]['currentSubscription']['priceInfo']['today'];
       let price = priceJson['data']['viewer']['homes'][0]['currentSubscription']['priceInfo']['current']['total'];
 
-      let minPrice = 100000
-      let maxPrice = 0
-      let avgPrice = 0
+      let minPrice = 100000;
+      let maxPrice = 0;
+      let avgPrice = 0;
 
-      //me.log(allPrices);
-      //me.log(price);
-      for (var i = 0; i < allPrices.length; i++) {
-        if (allPrices[i].total * 100 < minPrice)
-          minPrice = Math.round(allPrices[i].total * 100)
-        if (allPrices[i].total * 100 > maxPrice)
-          maxPrice = Math.round(allPrices[i].total * 100)
-        avgPrice += allPrices[i].total
+      for(var i = 0; i < allPrices.length; i++){
+        if(allPrices[i].total * 100 < minPrice){
+          minPrice = Math.round(allPrices[i].total * 100);
+        }
+        if(allPrices[i].total * 100 > maxPrice){
+          maxPrice = Math.round(allPrices[i].total * 100);
+        }
+        avgPrice += allPrices[i].total;
       }
-      avgPrice = avgPrice / allPrices.length * 100
+      avgPrice = avgPrice / allPrices.length * 100;
       
-      let lowprice = false
-      let priceOre = Math.round(price * 100)
+      let lowprice = false;
+      let priceOre = Math.round(price * 100);
       
-      if (priceOre < avgPrice)
-        lowprice = true
+      if(priceOre < avgPrice){
+        lowprice = true;
+      }
       
       me.motionService.getCharacteristic(Characteristic.MotionDetected).updateValue(lowprice);
 
@@ -109,24 +110,20 @@ myTS.prototype = {
     this.services = [];
 
     /* Information Service */
-
     let informationService = new Service.AccessoryInformation();
     informationService
       .setCharacteristic(Characteristic.Manufacturer, "Tibber")
       .setCharacteristic(Characteristic.Model, "Beta")
-      .setCharacteristic(Characteristic.SerialNumber, "0.1.0");
+      .setCharacteristic(Characteristic.SerialNumber, "0.1.5");
     this.services.push(informationService);
 
-    
     /* Motion sensor Service */
     let motionService = new Service.MotionSensor("Electricity price low");
     this.services.push(motionService);
 
     this.informationService = informationService;
     this.motionService = motionService;
-
     motionService.setPrimaryService(true);
-
     return this.services;
 
   }

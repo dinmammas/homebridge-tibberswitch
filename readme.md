@@ -6,6 +6,8 @@ WIP - not sure if it works at all yet :D
 * Fetch current energy price from the tibber api.
 * Activate a motion sensor if the price is lower than the day's average. 
 
+Use the motion sensor to trigger autmations, for instance activate thermostats/fans etc.
+
 
 ## Usage
 
