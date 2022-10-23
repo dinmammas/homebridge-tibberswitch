@@ -5,13 +5,13 @@ const url = require('url');
 
 let setupOK = false;
 
-module.exports = function (homebridge) {
+module.exports = function (homebridge){
   Service = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
   homebridge.registerAccessory("homebridge-tibberswitch", "HomebridgeTibberswitch", myTS);
 };
 
-function myTS(log, config) {
+function myTS(log, config){
   this.config = config;
   this.log = log;
   this.pollingInterval = 600000;
@@ -42,8 +42,7 @@ function myTS(log, config) {
       } \
     }"
   }
-
- }
+}
 
 myTS.prototype = {
 
@@ -61,7 +60,7 @@ myTS.prototype = {
         const tbjson = await responses.json()
         await updateDevices(me, tbjson);
       }catch(err){
-        me.log("Could not fetch tibber values :( " + err);
+        me.log("Could not fetch tibber values - " + err);
       }
     }
 
@@ -114,7 +113,7 @@ myTS.prototype = {
     informationService
       .setCharacteristic(Characteristic.Manufacturer, "Tibber")
       .setCharacteristic(Characteristic.Model, "Beta")
-      .setCharacteristic(Characteristic.SerialNumber, "0.1.5");
+      .setCharacteristic(Characteristic.SerialNumber, "0.1.6");
     this.services.push(informationService);
 
     /* Motion sensor Service */

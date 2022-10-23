@@ -19,3 +19,6 @@ Use the motion sensor to trigger autmations, for instance activate thermostats/f
 		"name": "TibberSwitch",    
 		"token": "YOUR_TIBBER_TOKEN"  
 	}  
+
+
+Greatly inspired by [iOSTibberWidget.](https://github.com/svenove/iOSTibberWidget)
