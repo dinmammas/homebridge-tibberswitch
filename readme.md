@@ -13,6 +13,7 @@ WIP - not sure if it works at all yet :D
 
 
 	{  
-		"accessory": "HomebridgeTibberswitch",    
+		"accessory": "HomebridgeTibberswitch",
+		"name": "TibberSwitch",    
 		"token": "YOUR_TIBBER_TOKEN"  
 	}  

@@ -14,6 +14,7 @@ module.exports = function (homebridge) {
 function myTS(log, config) {
   this.config = config;
   this.log = log;
+  this.pollingInterval = 600000;
 
   if(typeof config.token === 'string' && config.token != ""){
     setupOK = true;
@@ -23,7 +24,7 @@ function myTS(log, config) {
 
   /* Static config values */
   this.token = config.token 
-  let this.GQLbody = {
+  this.GQLbody = {
     "query": "{ \
       viewer { \
         homes { \
@@ -49,15 +50,15 @@ myTS.prototype = {
   getServices: function () {
     async function populateJson(me) {
       try{
-        const responses = await Promise.all(fetch("https://api.tibber.com/v1-beta/gql",{
+        const responses = await fetch("https://api.tibber.com/v1-beta/gql",{
           method: "POST",
           headers: {
             "Authorization": "Bearer " + me.token,
             "Content-Type": "application/json"
           },
           body:JSON.stringify(me.GQLbody)
-        }))
-        const tbjson = await Promise.all(responses.map(res => res.json()))
+        })
+        const tbjson = await responses.json()
         await updateDevices(me, tbjson);
       }catch(err){
         me.log("Could not fetch tibber values :( " + err);
@@ -66,30 +67,38 @@ myTS.prototype = {
 
     function updateDevices(me, priceJson){
       
-      let allPrices = priceJson.data.viewer.homes.[0].currentSubscription.priceInfo.today;
-      let price = priceJson.data.viewer.homes.[0].currentSubscription.priceInfo.current.total;
+      let allPrices = priceJson['data']['viewer']['homes'][0]['currentSubscription']['priceInfo']['today'];
+      let price = priceJson['data']['viewer']['homes'][0]['currentSubscription']['priceInfo']['current']['total'];
 
       let minPrice = 100000
       let maxPrice = 0
-      let averagePrice = 0
-      for (var i = 0; i < allPrices.length; i++){
-        if (allPrices[i].total * 100 < minPrice){
+      let avgPrice = 0
+
+      //me.log(allPrices);
+      //me.log(price);
+      for (var i = 0; i < allPrices.length; i++) {
+        if (allPrices[i].total * 100 < minPrice)
           minPrice = Math.round(allPrices[i].total * 100)
-        }
-        if (allPrices[i].total * 100 > maxPrice){
+        if (allPrices[i].total * 100 > maxPrice)
           maxPrice = Math.round(allPrices[i].total * 100)
-        }
-        averagePrice += allPrices[i].total
+        avgPrice += allPrices[i].total
       }
-      averagePrice = averagePrice / allPrices.length * 100
+      avgPrice = avgPrice / allPrices.length * 100
       
       let lowprice = false
       let priceOre = Math.round(price * 100)
       
-      if (priceOre < averagePrice)
+      if (priceOre < avgPrice)
         lowprice = true
       
       me.motionService.getCharacteristic(Characteristic.MotionDetected).updateValue(lowprice);
+
+      me.log("Current electricity price is "+priceOre+" öre.");
+      if(lowprice){
+        me.log("Price is below average.");
+      }else{
+        me.log("Price is over average.");
+      }
       
     }
     if(setupOK){
@@ -105,7 +114,7 @@ myTS.prototype = {
     informationService
       .setCharacteristic(Characteristic.Manufacturer, "Tibber")
       .setCharacteristic(Characteristic.Model, "Beta")
-      .setCharacteristic(Characteristic.SerialNumber, "0.1.2");
+      .setCharacteristic(Characteristic.SerialNumber, "0.1.0");
     this.services.push(informationService);
 
     
