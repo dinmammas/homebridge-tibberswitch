@@ -4,7 +4,7 @@ WIP - not sure if it works at all yet :D
 
 **This plugin will:**
 * Fetch current energy price from the tibber api.
-* Let you set a threshold at which price point the switch should be activated. 
+* Activate a motion sensor if the price is lower than the day's average. 
 
 
 ## Usage
