@@ -16,6 +16,8 @@ function myTS(log, config){
   this.log = log;
   this.pollingInterval = 600000;
 
+  this.priceThreshold = config.threshold || 0;
+
   if(typeof config.token === 'string' && config.token != ""){
     setupOK = true;
   }else{
@@ -32,6 +34,7 @@ function myTS(log, config){
             priceInfo { \
               current { \
                 total \
+                level \
               } \
               today { \
                 total \
@@ -41,6 +44,22 @@ function myTS(log, config){
         } \
       } \
     }"
+  }
+  /* Dynamic values based on config */
+  this.levels = [];
+  this.runAverage = true;
+
+  if(this.priceThreshold > 0){
+    this.runAverage = false;
+    if(this.priceThreshold === 1){
+      this.levels.push('VERY_CHEAP');
+    }else if(this.priceThreshold === 2){
+      this.levels.push('VERY_CHEAP','CHEAP');
+    }else if(this.priceThreshold ===3){
+      this.levels.push('VERY_CHEAP','CHEAP','NORMAL');
+    }else if(this.priceThreshold === 4){
+      this.levels.push('VERY_CHEAP','CHEAP','NORMAL','EXPENSIVE');
+    }
   }
 }
 
@@ -68,38 +87,42 @@ myTS.prototype = {
       
       let allPrices = priceJson['data']['viewer']['homes'][0]['currentSubscription']['priceInfo']['today'];
       let price = priceJson['data']['viewer']['homes'][0]['currentSubscription']['priceInfo']['current']['total'];
-
-      let minPrice = 100000;
-      let maxPrice = 0;
-      let avgPrice = 0;
-
-      for(var i = 0; i < allPrices.length; i++){
-        if(allPrices[i].total * 100 < minPrice){
-          minPrice = Math.round(allPrices[i].total * 100);
-        }
-        if(allPrices[i].total * 100 > maxPrice){
-          maxPrice = Math.round(allPrices[i].total * 100);
-        }
-        avgPrice += allPrices[i].total;
-      }
-      avgPrice = avgPrice / allPrices.length * 100;
-      
+      let priceLevel = priceJson['data']['viewer']['homes'][0]['currentSubscription']['priceInfo']['current']['level'];
       let lowprice = false;
       let priceOre = Math.round(price * 100);
-      
-      if(priceOre < avgPrice){
-        lowprice = true;
+      if(me.runAverage){
+        let minPrice = 100000;
+        let maxPrice = 0;
+        let avgPrice = 0;
+
+        for(var i = 0; i < allPrices.length; i++){
+          if(allPrices[i].total * 100 < minPrice){
+            minPrice = Math.round(allPrices[i].total * 100);
+          }
+          if(allPrices[i].total * 100 > maxPrice){
+            maxPrice = Math.round(allPrices[i].total * 100);
+          }
+          avgPrice += allPrices[i].total;
+        }
+        avgPrice = avgPrice / allPrices.length * 100;
+        
+        if(priceOre < avgPrice){
+          lowprice = true;
+        }
+      }else{
+        if(me.levels.includes(priceLevel)){
+          lowprice = true;
+        }
       }
-      
       me.motionService.getCharacteristic(Characteristic.MotionDetected).updateValue(lowprice);
 
       me.log("Current electricity price is "+priceOre+" öre.");
       if(lowprice){
-        me.log("Price is below average.");
+        me.log("Price is below your desired threshold.");
       }else{
-        me.log("Price is over average.");
+        me.log("Price is over your desired threshold.");
       }
-      
+      me.log("Tibber considers the price to be " + priceLevel + " compared to hourly prices from the last three days.");
     }
     if(setupOK){
       populateJson(this);
@@ -113,7 +136,7 @@ myTS.prototype = {
     informationService
       .setCharacteristic(Characteristic.Manufacturer, "Tibber")
       .setCharacteristic(Characteristic.Model, "Beta")
-      .setCharacteristic(Characteristic.SerialNumber, "0.1.6");
+      .setCharacteristic(Characteristic.SerialNumber, "0.1.7");
     this.services.push(informationService);
 
     /* Motion sensor Service */
