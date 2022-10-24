@@ -30,6 +30,7 @@ Threshold can be any of the following:
 | 2 |This will activate the motion sensor if the current price level is **CHEAP** or lower  |
 | 3 |This will activate the motion sensor if the current price level is **NORMAL** or lower  |
 | 4 |This will activate the motion sensor if the current price level is **EXPENSIVE** or lower  |
+
 The price levels (VERY_CHEAP, CHEAP, NORMAL and EXPENSIVE) are calculated by Tibber, based on prices from the last three days.
 
 Greatly inspired by [iOSTibberWidget.](https://github.com/svenove/iOSTibberWidget)
