@@ -3,7 +3,7 @@
   "pluginType": "accessory",
   "singular": true,
   "headerDisplay": "Please see the [npm page](https://www.npmjs.com/package/homebridge-tibberswitch) for detailed installation instructions.",
-  "footerDisplay": "You need to be a Tibber customer and obain an API token from their [dev page](https://developer.tibber.com) to make this plugin work.",
+  "footerDisplay": "You need to be a Tibber customer and obtain an API token from their [dev page](https://developer.tibber.com) to make this plugin work.",
   "schema": {
     "type": "object",
     "properties": {

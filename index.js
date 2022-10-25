@@ -136,7 +136,7 @@ myTS.prototype = {
     informationService
       .setCharacteristic(Characteristic.Manufacturer, "Tibber")
       .setCharacteristic(Characteristic.Model, "Beta")
-      .setCharacteristic(Characteristic.SerialNumber, "0.1.7");
+      .setCharacteristic(Characteristic.SerialNumber, "0.1.8");
     this.services.push(informationService);
 
     /* Motion sensor Service */

@@ -32,5 +32,9 @@ Threshold can be any of the following:
 | 4 |This will activate the motion sensor if the current price level rating is **EXPENSIVE** or lower  |
 
 The price level ratings (VERY_CHEAP, CHEAP, NORMAL and EXPENSIVE) are calculated by Tibber, based on prices from the last three days.
+  
 
+**You need to be a Tibber customer and obain an API token from their [dev page](https://developer.tibber.com) to make this plugin work.**
+  
+  
 Greatly inspired by [iOSTibberWidget.](https://github.com/svenove/iOSTibberWidget)
