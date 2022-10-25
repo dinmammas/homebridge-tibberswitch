@@ -2,9 +2,9 @@
 # Homebridge-Tibberswitch
 
 
-**This plugin will:**
-* Fetch current energy price from the tibber api.
-* Activate a motion sensor if the current electricity price is lower than the desired threshold value. 
+**This plugin will:**  
+* Fetch current energy price from the tibber api.  
+* Activate a motion sensor if the current electricity price is lower than the desired threshold value.  
 
 Use the motion sensor to trigger automations, for instance activate thermostats/fans etc.
 
