@@ -1,0 +1,35 @@
+{
+  "pluginAlias": "HomebridgeTibberswitch",
+  "pluginType": "accessory",
+  "singular": true,
+  "headerDisplay": "Please see the [npm page](https://www.npmjs.com/package/homebridge-tibberswitch) for detailed installation instructions.",
+  "footerDisplay": "You need to be a Tibber customer and obain an API token from their [dev page](https://developer.tibber.com) to make this plugin work.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "required": true
+      },
+      "token": {
+        "title": "Your API Token from Tibber",
+        "type": "string",
+        "required": true
+      },
+      "threshold": {
+        "title": "Threshold when to activate the motion sensor",
+        "type": "integer",
+        "default": 0,
+        "oneOf": [
+          { "title": "Below the average price of the current day", "enum": [0]},
+          { "title": "On Very cheap prices", "enum": [1]},
+          { "title": "On Cheap prices and below", "enum": [2]},
+          { "title": "On Normal prices and below", "enum": [3]},
+          { "title": "On Expensive prices and below", "enum": [4]}
+        ],
+        "required": true
+      }
+    }
+  }
+}
