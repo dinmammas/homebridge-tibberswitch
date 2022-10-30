@@ -109,10 +109,12 @@ myTS.prototype = {
         if(priceOre < avgPrice){
           lowprice = true;
         }
+        me.log("Daily average price is: "+avgPrice+"öre");
       }else{
         if(me.levels.includes(priceLevel)){
           lowprice = true;
         }
+        me.log("Current price level rating: " + priceLevel);
       }
       me.motionService.getCharacteristic(Characteristic.MotionDetected).updateValue(lowprice);
 
@@ -122,7 +124,6 @@ myTS.prototype = {
       }else{
         me.log("Price is over your desired threshold.");
       }
-      me.log("Tibber considers the price to be " + priceLevel + " compared to hourly prices from the last three days.");
     }
     if(setupOK){
       populateJson(this);
@@ -136,7 +137,7 @@ myTS.prototype = {
     informationService
       .setCharacteristic(Characteristic.Manufacturer, "Tibber")
       .setCharacteristic(Characteristic.Model, "Beta")
-      .setCharacteristic(Characteristic.SerialNumber, "0.1.8");
+      .setCharacteristic(Characteristic.SerialNumber, "0.1.9");
     this.services.push(informationService);
 
     /* Motion sensor Service */

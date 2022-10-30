@@ -1,6 +1,6 @@
 {
   "name": "homebridge-tibberswitch",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "author": "David Karlsson",
   "description": "Fetches hourly electrical prices from Tibber and if the current price is lower than todays average, a motion is triggered.",
   "main": "index.js",
@@ -12,7 +12,7 @@
   "repository": "github:dinmammas/homebridge-tibberswitch",
   "engines": {
     "homebridge": ">=1.4.0",
-    "node": ">=12.0.0"
+    "node": ">=14.0.0"
   },
   "keywords": [
     "homebridge-plugin",
