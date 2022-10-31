@@ -1,6 +1,8 @@
 
 # Homebridge-Tibberswitch
-
+[![Downloads](https://img.shields.io/npm/dt/homebridge-tibberswitch.svg?color=critical)](https://www.npmjs.com/package/homebridge-tibberswitch)
+[![Version](https://img.shields.io/npm/v/homebridge-tibberswitch)](https://www.npmjs.com/package/homebridge-tibberswitch)
+[![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
 
 **This plugin will:**  
 * Fetch current energy price from the tibber api.  
