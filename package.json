@@ -1,6 +1,6 @@
 {
   "name": "homebridge-tibberswitch",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "David Karlsson",
   "description": "Fetches hourly electrical prices from Tibber and if the current price is lower than todays average, a motion is triggered.",
   "main": "index.js",
@@ -20,7 +20,8 @@
     "homekit"
   ],
   "dependencies": {
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "node-cron": "^3.0.2"
   },
   "funding": {
     "type": "paypal",

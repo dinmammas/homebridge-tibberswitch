@@ -1,12 +1,17 @@
 var Service, Characteristic;
 
 const fetch = require('node-fetch');
+const cron = require('node-cron');
 const url = require('url');
-
+var hbapi;
+var nodever = process.versions.node;
+var tibsw_version = "0.3.0";
 let setupOK = false;
+let firstrun = true;
 
 module.exports = function (homebridge){
   Service = homebridge.hap.Service;
+  hbapi = homebridge;
   Characteristic = homebridge.hap.Characteristic;
   homebridge.registerAccessory("homebridge-tibberswitch", "HomebridgeTibberswitch", myTS);
 };
@@ -32,12 +37,10 @@ function myTS(log, config){
         homes { \
           currentSubscription { \
             priceInfo { \
-              current { \
-                total \
-                level \
-              } \
               today { \
                 total \
+                level \
+                startsAt\
               } \
             } \
           } \
@@ -48,6 +51,7 @@ function myTS(log, config){
   /* Dynamic values based on config */
   this.levels = [];
   this.runAverage = true;
+  this.tbjson = {};
 
   if(this.priceThreshold > 0){
     this.runAverage = false;
@@ -72,22 +76,25 @@ myTS.prototype = {
           method: "POST",
           headers: {
             "Authorization": "Bearer " + me.token,
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "User-Agent": "Homebridge/"+hbapi.serverVersion+" homebridge-tibberswitch/" + tibsw_version + " node/"+nodever
           },
           body:JSON.stringify(me.GQLbody)
         })
-        const tbjson = await responses.json()
-        await updateDevices(me, tbjson);
+        me.tbjson = await responses.json()
+        await updateDevices(me, me.tbjson,true);
       }catch(err){
         me.log("Could not fetch tibber values - " + err);
       }
     }
 
-    function updateDevices(me, priceJson){
+    function updateDevices(me, priceJson,daily){
       
       let allPrices = priceJson['data']['viewer']['homes'][0]['currentSubscription']['priceInfo']['today'];
-      let price = priceJson['data']['viewer']['homes'][0]['currentSubscription']['priceInfo']['current']['total'];
-      let priceLevel = priceJson['data']['viewer']['homes'][0]['currentSubscription']['priceInfo']['current']['level'];
+      let currentHour = new Date().getHours();
+      let price = allPrices[currentHour].total;
+      let priceLevel = allPrices[currentHour].level;
+
       let lowprice = false;
       let priceOre = Math.round(price * 100);
       if(me.runAverage){
@@ -105,11 +112,12 @@ myTS.prototype = {
           avgPrice += allPrices[i].total;
         }
         avgPrice = avgPrice / allPrices.length * 100;
-        
+        if(daily){
+          me.log("Daily prices fetched. Daily average is: "+Math.round(avgPrice)+" cents");
+        }
         if(priceOre < avgPrice){
           lowprice = true;
         }
-        me.log("Daily average price is: "+avgPrice+"öre");
       }else{
         if(me.levels.includes(priceLevel)){
           lowprice = true;
@@ -117,8 +125,9 @@ myTS.prototype = {
         me.log("Current price level rating: " + priceLevel);
       }
       me.motionService.getCharacteristic(Characteristic.MotionDetected).updateValue(lowprice);
-
-      me.log("Current electricity price is "+priceOre+" öre.");
+      
+      me.log("Current electricity price is "+priceOre+" cents.");
+      
       if(lowprice){
         me.log("Price is below your desired threshold.");
       }else{
@@ -127,9 +136,16 @@ myTS.prototype = {
     }
     if(setupOK){
       populateJson(this);
-      setInterval(() => { populateJson(this) }, this.pollingInterval);
-    }
 
+      cron.schedule('5 0 1-23 * * *', () =>{
+        updateDevices(this, this.tbjson,false);
+      });
+
+      cron.schedule('0 0 * * *', () =>{
+        populateJson(this);
+      });
+    }
+    
     this.services = [];
 
     /* Information Service */
@@ -137,7 +153,7 @@ myTS.prototype = {
     informationService
       .setCharacteristic(Characteristic.Manufacturer, "Tibber")
       .setCharacteristic(Characteristic.Model, "Production")
-      .setCharacteristic(Characteristic.SerialNumber, "0.2.0");
+      .setCharacteristic(Characteristic.SerialNumber, tibsw_version);
     this.services.push(informationService);
 
     /* Motion sensor Service */
