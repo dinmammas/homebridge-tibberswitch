@@ -5,7 +5,7 @@ const cron = require('node-cron');
 const url = require('url');
 var hbapi;
 var nodever = process.versions.node;
-var tibsw_version = "0.3.0";
+var tibsw_version = "0.3.1";
 let setupOK = false;
 let firstrun = true;
 
@@ -19,11 +19,10 @@ module.exports = function (homebridge){
 function myTS(log, config){
   this.config = config;
   this.log = log;
-  this.pollingInterval = 600000;
 
   this.priceThreshold = config.threshold || 0;
 
-  if(typeof config.token === 'string' && config.token != ""){
+  if(typeof config.token === 'string' && config.token != ''){
     setupOK = true;
   }else{
     this.log("Token error - please check your config");
