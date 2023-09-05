@@ -29,6 +29,19 @@
           { "title": "On Expensive prices and below", "enum": [4]}
         ],
         "required": true
+      },
+      "home": {
+        "title": "Which home you'd like to get data for.",
+        "type": "integer",
+        "default": 0,
+        "oneOf": [
+          { "title": "0", "enum": [0]},
+          { "title": "1", "enum": [1]},
+          { "title": "2", "enum": [2]},
+          { "title": "3", "enum": [3]},
+          { "title": "4", "enum": [4]}
+        ],
+        "required": false
       }
     }
   }

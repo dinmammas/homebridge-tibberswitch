@@ -20,7 +20,8 @@ Use the motion sensor to trigger automations, for instance activate thermostats/
 		"accessory": "HomebridgeTibberswitch",
 		"name": "TibberSwitch",
 		"token": "YOUR_TIBBER_TOKEN",
-		"threshold": 2
+		"threshold": 2,
+		"home": 1
 	}  
 
 Threshold can be any of the following:
@@ -32,6 +33,8 @@ Threshold can be any of the following:
 | 2 |This will activate the motion sensor if the current price level rating is **CHEAP** or lower  |
 | 3 |This will activate the motion sensor if the current price level rating is **NORMAL** or lower  |
 | 4 |This will activate the motion sensor if the current price level rating is **EXPENSIVE** or lower  |
+
+Home can be omitted, or used to select which home you'd like to fetch data for. Default is 0.
 
 The price level ratings (VERY_CHEAP, CHEAP, NORMAL and EXPENSIVE) are calculated by Tibber, based on prices from the last three days.
   

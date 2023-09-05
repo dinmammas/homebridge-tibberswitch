@@ -30,6 +30,7 @@ function myTS(log, config){
 
   /* Static config values */
   this.token = config.token 
+  this.homeNumber = config.home || 0;
   this.GQLbody = {
     "query": "{ \
       viewer { \
@@ -89,7 +90,7 @@ myTS.prototype = {
 
     function updateDevices(me, priceJson,daily){
       
-      let allPrices = priceJson['data']['viewer']['homes'][0]['currentSubscription']['priceInfo']['today'];
+      let allPrices = priceJson['data']['viewer']['homes'][me.homeNumber]['currentSubscription']['priceInfo']['today'];
       let currentHour = new Date().getHours();
       let price = allPrices[currentHour].total;
       let priceLevel = allPrices[currentHour].level;
