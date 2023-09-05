@@ -5,7 +5,7 @@ const cron = require('node-cron');
 const url = require('url');
 var hbapi;
 var nodever = process.versions.node;
-var tibsw_version = "0.3.1";
+var tibsw_version = "0.3.3";
 let setupOK = false;
 let firstrun = true;
 
@@ -91,6 +91,10 @@ myTS.prototype = {
     function updateDevices(me, priceJson,daily){
       
       let allPrices = priceJson['data']['viewer']['homes'][me.homeNumber]['currentSubscription']['priceInfo']['today'];
+      if (allPrices === undefined){
+        allPrices = priceJson['data']['viewer']['homes'][0]['currentSubscription']['priceInfo']['today'];
+        me.log("Home with number "+me.homeNumber+" not found. Using default home.");
+      }
       let currentHour = new Date().getHours();
       let price = allPrices[currentHour].total;
       let priceLevel = allPrices[currentHour].level;
