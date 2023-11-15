@@ -21,11 +21,12 @@ function myTS(log, config){
   this.log = log;
 
   this.priceThreshold = config.threshold || 0;
+  this.percentageTheshold = config.percentage || 0;
 
   if(typeof config.token === 'string' && config.token != ''){
     setupOK = true;
   }else{
-    this.log("Token error - please check your config");
+    this.log(`Token error - please check your config`);
   }
 
   /* Static config values */
@@ -53,7 +54,7 @@ function myTS(log, config){
   this.runAverage = true;
   this.tbjson = {};
 
-  if(this.priceThreshold > 0){
+  if((this.priceThreshold > 0 && this.percentageTheshold == 0)){
     this.runAverage = false;
     if(this.priceThreshold === 1){
       this.levels.push('VERY_CHEAP');
@@ -84,7 +85,7 @@ myTS.prototype = {
         me.tbjson = await responses.json()
         await updateDevices(me, me.tbjson,true);
       }catch(err){
-        me.log("Could not fetch tibber values - " + err);
+        me.log(`Could not fetch tibber values -  ${err}`);
       }
     }
 
@@ -93,7 +94,7 @@ myTS.prototype = {
       let allPrices = priceJson['data']['viewer']['homes'][me.homeNumber]['currentSubscription']['priceInfo']['today'];
       if (allPrices === undefined){
         allPrices = priceJson['data']['viewer']['homes'][0]['currentSubscription']['priceInfo']['today'];
-        me.log("Home with number "+me.homeNumber+" not found. Using default home.");
+        me.log(`Home with number ${me.homeNumber} not found. Using default home.`);
       }
       let currentHour = new Date().getHours();
       let price = allPrices[currentHour].total;
@@ -101,10 +102,12 @@ myTS.prototype = {
 
       let lowprice = false;
       let priceOre = Math.round(price * 100);
+      let percentPrice = 0;
       if(me.runAverage){
         let minPrice = 100000;
         let maxPrice = 0;
         let avgPrice = 0;
+        
 
         for(var i = 0; i < allPrices.length; i++){
           if(allPrices[i].total * 100 < minPrice){
@@ -116,23 +119,31 @@ myTS.prototype = {
           avgPrice += allPrices[i].total;
         }
         avgPrice = avgPrice / allPrices.length * 100;
+        percentPrice = Math.round((priceOre / avgPrice) * 100);
         if(daily){
-          me.log("Daily prices fetched. Daily average is: "+Math.round(avgPrice)+" cents");
+          me.log(`Daily prices fetched. Daily average is: ${Math.round(avgPrice)} cents`);
         }
         if(priceOre < avgPrice){
           lowprice = true;
         }
+        if (percentPrice < me.percentageTheshold) {
+          lowprice = true;
+
+        }
+
+      
+
       }else{
         if(me.levels.includes(priceLevel)){
           lowprice = true;
         }
-        me.log("Current price level rating: " + priceLevel);
+        me.log(`Current price level rating: ${priceLevel}`);
       }
       me.motionService.getCharacteristic(Characteristic.MotionDetected).updateValue(lowprice);
       
-      me.log("Current electricity price is "+priceOre+" cents.");
-      
-      if(lowprice){
+      me.log(`Current electricity price is ${priceOre} cents.`);
+      me.log(`Current price percentage is ${percentPrice}% of daily average`)
+      if(lowprice){ 
         me.log("Price is below your desired threshold.");
       }else{
         me.log("Price is over your desired threshold.");
