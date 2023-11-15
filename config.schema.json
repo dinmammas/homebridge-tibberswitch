@@ -30,6 +30,12 @@
         ],
         "required": true
       },
+      "percentage": {
+        "title": "Percentage threshold for current price compared to average price to activate the motion sensor",
+        "type": "integer",
+        "default": 0,
+        "required": false
+      },
       "home": {
         "title": "Which home you'd like to get data for.",
         "type": "integer",

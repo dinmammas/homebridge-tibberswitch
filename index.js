@@ -5,7 +5,7 @@ const cron = require('node-cron');
 const url = require('url');
 var hbapi;
 var nodever = process.versions.node;
-var tibsw_version = "0.3.3";
+var tibsw_version = "0.3.4";
 let setupOK = false;
 let firstrun = true;
 
