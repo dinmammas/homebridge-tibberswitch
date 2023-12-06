@@ -21,6 +21,7 @@ Use the motion sensor to trigger automations, for instance activate thermostats/
 		"name": "TibberSwitch",
 		"token": "YOUR_TIBBER_TOKEN",
 		"threshold": 2,
+		"percentage": 115
 		"home": 1
 	}  
 
@@ -33,6 +34,8 @@ Threshold can be any of the following:
 | 2 |This will activate the motion sensor if the current price level rating is **CHEAP** or lower  |
 | 3 |This will activate the motion sensor if the current price level rating is **NORMAL** or lower  |
 | 4 |This will activate the motion sensor if the current price level rating is **EXPENSIVE** or lower  |
+
+Percentage can be omitted, or if you would like to activate the the motion sensor when the current price is within the percentage range of **daily average**. Default us 0.
 
 Home can be omitted, or used to select which home you'd like to fetch data for. Default is 0.
 
