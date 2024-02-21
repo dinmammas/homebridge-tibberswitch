@@ -9,7 +9,10 @@
   },
   "license": "ISC",
   "bugs": "dinmammas@gmail.com",
-  "repository": "github:dinmammas/homebridge-tibberswitch",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dinmammas/homebridge-tibberswitch.git"
+  },
   "engines": {
     "homebridge": ">=1.4.0",
     "node": ">=14.0.0"
