@@ -122,7 +122,7 @@ myTS.prototype = {
         avgPrice = avgPrice / allPrices.length * 100;
         percentPrice = Math.round((priceOre / avgPrice) * 100);
         if(daily){
-          me.log(`Daily prices fetched. Daily average is: ${Math.round(avgPrice)} ${currency}.`);
+          me.log(`Daily prices fetched. Daily average is: ${Math.round(avgPrice)} ${me.currency}.`);
         }
         if(priceOre < avgPrice){
           lowprice = true;
@@ -142,7 +142,7 @@ myTS.prototype = {
       }
       me.motionService.getCharacteristic(Characteristic.MotionDetected).updateValue(lowprice);
       
-      me.log(`Current electricity price is ${priceOre} ${currency}.`);
+      me.log(`Current electricity price is ${priceOre} ${me.currency}.`);
       me.log(`Current price percentage is ${percentPrice}% of the daily average`)
       if(lowprice){ 
         me.log("Price is below your desired threshold.");
