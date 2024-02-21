@@ -48,6 +48,12 @@
           { "title": "4", "enum": [4]}
         ],
         "required": false
+      },
+      "currency": {
+        "title": "Your preferred display currency (i.e. cents, öre, øre) ",
+        "type": "string",
+        "default": "cents",
+        "required": false
       }
     }
   }

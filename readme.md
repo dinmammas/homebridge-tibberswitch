@@ -22,7 +22,8 @@ Use the motion sensor to trigger automations, for instance activate thermostats/
 		"token": "YOUR_TIBBER_TOKEN",
 		"threshold": 2,
 		"percentage": 115,
-		"home": 1
+		"home": 1,
+		"currency": "öre"
 	}  
 
 Threshold can be any of the following:
@@ -38,6 +39,8 @@ Threshold can be any of the following:
 Percentage can be omitted. When used, it activates the the motion sensor when the current price is within the percentage range of **daily average**. Default is 0.
 
 Home can be omitted, or used to select which home you'd like to fetch data for. Default is 0.
+
+Currency can be omitted. Defaults to cents.
 
 The price level ratings (VERY_CHEAP, CHEAP, NORMAL and EXPENSIVE) are calculated by Tibber, based on prices from the last three days.
   

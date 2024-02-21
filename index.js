@@ -22,6 +22,7 @@ function myTS(log, config){
 
   this.priceThreshold = config.threshold || 0;
   this.percentageTheshold = config.percentage || 0;
+  this.currency = config.currency || 'cents';
 
   if(typeof config.token === 'string' && config.token != ''){
     setupOK = true;
@@ -121,7 +122,7 @@ myTS.prototype = {
         avgPrice = avgPrice / allPrices.length * 100;
         percentPrice = Math.round((priceOre / avgPrice) * 100);
         if(daily){
-          me.log(`Daily prices fetched. Daily average is: ${Math.round(avgPrice)} cents`);
+          me.log(`Daily prices fetched. Daily average is: ${Math.round(avgPrice)} ${currency}.`);
         }
         if(priceOre < avgPrice){
           lowprice = true;
@@ -141,8 +142,8 @@ myTS.prototype = {
       }
       me.motionService.getCharacteristic(Characteristic.MotionDetected).updateValue(lowprice);
       
-      me.log(`Current electricity price is ${priceOre} cents.`);
-      me.log(`Current price percentage is ${percentPrice}% of daily average`)
+      me.log(`Current electricity price is ${priceOre} ${currency}.`);
+      me.log(`Current price percentage is ${percentPrice}% of the daily average`)
       if(lowprice){ 
         me.log("Price is below your desired threshold.");
       }else{
